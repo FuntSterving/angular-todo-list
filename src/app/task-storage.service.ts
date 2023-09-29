@@ -1,26 +1,22 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from "@angular/core";
 
-import {init_tasks} from '../assets/todo-list.json';
-import {Task} from "../app/shared/models/task.model";
+import { init_tasks } from "../assets/todo-list.json";
+import { Task } from "../app/shared/models/task.model";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class TaskStorageService {
-
   tasks: Task[] = [];
 
-  /**
-   * Whether data have already been loaded from storage
-   */
+  /*** Whether data have already been loaded from storage*/
+
   initialized: boolean = false;
 
-  constructor() {
-  }
+  constructor() {}
 
-  /**
-   * Returns all tasks
-   */
+  /*** Returns all tasks*/
+
   getTasks(): Task[] {
     this.init();
     return this.tasks;
@@ -31,14 +27,15 @@ export class TaskStorageService {
    *
    * @param index task index to remove
    */
-  delete(id) {
+
+  delete(id: number) {
     let remaining_tasks: Task[] = [];
     for (let i = 0; i < this.tasks.length; i++) {
       var current_task = this.tasks[i];
 
       // we found the task to remove, we do not include it in our new array
       if (id == current_task.id) {
-        console.log('Skipping tash[' + current_task.title + ']');
+        console.log("Skipping tash[" + current_task.title + "]");
         continue;
       }
 
@@ -53,8 +50,8 @@ export class TaskStorageService {
    *
    * @param id
    */
-  get(id): Task {
 
+  get(id: number): Task {
     this.init();
 
     for (let i = 0; i < this.tasks.length; i++) {
@@ -74,8 +71,16 @@ export class TaskStorageService {
    * @param title
    * @param note
    */
-  add(title, note) {
-    let task = new Task(title, note, this.getHighestId() + 1);
+
+  add(data: Task) {
+    let task = new Task(
+      data.title,
+      data.note,
+      this.getHighestId() + 1,
+      data.status,
+      data.difficulty
+    );
+
     this.tasks.push(task);
   }
 
@@ -88,45 +93,46 @@ export class TaskStorageService {
    *
    * @return Task
    */
-  update(id, title: string, note: string): Task {
 
-    let task = this.get(id);
-    task.title = title;
-    task.note = note;
+  update(data: Task): Task {
+    const task = this.get(data.id);
+    task.title = data.title;
+    task.note = data.note;
+    task.status = data.status;
+    task.difficulty = data.difficulty;
 
     return task;
   }
 
-  /**
-   * Load tasks from json file
-   */
+  /** * Load tasks from json file*/
   init() {
     if (this.initialized) {
-      console.log('Already initialized');
+      console.log("Already initialized");
       return;
     }
-    console.log('Loading data from json file');
+    console.log("Loading data from json file");
 
     for (let i = 0; i < init_tasks.length; i++) {
       this.tasks.push(
         new Task(
-          init_tasks[i]['title'],
-          init_tasks[i]['note'],
-          init_tasks[i]['id'])
+          init_tasks[i]["title"],
+          init_tasks[i]["note"],
+          init_tasks[i]["id"],
+          init_tasks[i]["status"],
+          init_tasks[i]["difficulty"]
+        )
       );
     }
 
     this.initialized = true;
   }
 
-  /**
-   * Returns highest task id from our list.
-   */
+  /*** Returns highest task id from our list. */
+  
   getHighestId(): number {
     let highest: number = 0;
     this.init();
     this.tasks.forEach(function (current_task: Task) {
-
       if (current_task.id < highest) {
         return;
       }
