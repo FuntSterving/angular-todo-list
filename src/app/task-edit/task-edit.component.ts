@@ -32,6 +32,9 @@ export class TaskEditComponent implements OnInit {
       this.id = this.task.id;
       this.note.setValue(this.task.note);
       this.title.setValue(this.task.title);
+      this.status.setValue(this.task.status);
+      this.difficulty.setValue(this.task.difficulty);
+
     });
   }
 
