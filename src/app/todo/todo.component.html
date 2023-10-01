@@ -1,9 +1,9 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<button class="btn btn-success" [routerLink]="['/tasks/add']">New task</button>
+<button class="btn btn-secondary btn-lg btn-block" [routerLink]="['/tasks/add']" style="margin: 2% 0 2% 0;">New task</button>
 
 <div *ngIf="tasks && tasks.length > 0; else noTasks">
   <table class="table table-striped">
-    <thead>
+    <thead class="thead-dark">
     <tr>
       <th>#</th>
       <th>Task</th>
@@ -18,8 +18,24 @@
       <td>{{ task.id }}</td>
       <td>{{ task.title }}</td>
       <td>{{ task.note }}</td>
-      <td>{{ task.status }}</td>
-      <td>{{ task.difficulty }}</td>
+      <!-- <td>{{ task.status }}</td> -->
+      <td>
+        <div style="background-color: brown; color: beige; text-align: center; border-radius: 13px; margin: 8px auto;">
+        <ng-container *ngIf="task.status === 'finished'; else pendingOrNotStarted">
+          Завершено
+        </ng-container>
+        <ng-template #pendingOrNotStarted>
+          <ng-container *ngIf="task.status === 'pending'; else notStarted">
+           Выполнение
+          </ng-container>
+          <ng-template #notStarted>
+            Не начато
+          </ng-template>
+        </ng-template>
+      </div>
+      </td>
+      
+      <td style="text-align: center;"><div style=" text-align: center;" class="ICont"><i class="fas fa-star" ></i>   {{ task.difficulty }}</div></td>
       <td>
         <button class="btn btn-light" [routerLink]="['/tasks/', task.id]"><i class="far fa-eye"></i></button>
         <button class="btn btn-light" (click)="delete(task.id)"><i class="far fa-trash-alt"></i></button>

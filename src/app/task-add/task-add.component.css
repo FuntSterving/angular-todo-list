@@ -1,0 +1,13 @@
+select {
+    cursor: default;
+    transition: background-color 0.2s, cursor 0.2s;
+  }
+  
+  select:hover {
+    cursor: pointer;
+    background-color: #e4e5e6;
+  }
+  
+  h2{
+    text-align: center;
+  }
